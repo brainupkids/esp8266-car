@@ -1,6 +1,7 @@
 #define BLYNK_PRINT Serial
 
 #define ROBIGAMI_DEBUG 1
+#define ROBIGAMI_MOVE_BACK_SWAP 1
 
 #include "./credentials-blynk.h"
 #include "./credentials-wifi.h"
@@ -97,25 +98,39 @@ void moveControl(int x, int y) {
     #endif
   }
 
-  // move back and right
+  // move back and right: swap left <-> right
   else if(y <= minRange && x <= minRange)
   {
     digitalWrite(RightMotorDir,LOW);
     digitalWrite(LeftMotorDir,LOW);
+    //
+    #if defined ROBIGAMI_MOVE_BACK_SWAP
+    analogWrite(RightMotorSpeed,maxSpeed + maxSpeedDeltaRight);
+    analogWrite(LeftMotorSpeed,minSpeed + minSpeedDeltaLeft);
+    #else
     analogWrite(RightMotorSpeed,minSpeed + minSpeedDeltaRight);
     analogWrite(LeftMotorSpeed,maxSpeed + maxSpeedDeltaLeft);
+    #endif
+    //
     #if defined ROBIGAMI_DEBUG
     Serial.println("Move back right");
     #endif
   }
 
-  // move back and left
+  // move back and left: swap left <-> right
   else if(y <= minRange && x >= maxRange)
   {
     digitalWrite(RightMotorDir,LOW);
     digitalWrite(LeftMotorDir,LOW);
+    //
+    #if defined ROBIGAMI_MOVE_BACK_SWAP
+    analogWrite(RightMotorSpeed,minSpeed + minSpeedDeltaRight);
+    analogWrite(LeftMotorSpeed,maxSpeed + maxSpeedDeltaLeft);
+    #else
     analogWrite(RightMotorSpeed,maxSpeed + maxSpeedDeltaRight);
     analogWrite(LeftMotorSpeed,minSpeed + minSpeedDeltaLeft);
+    #endif
+    //
     #if defined ROBIGAMI_DEBUG
     Serial.println("Move back left");
     #endif
