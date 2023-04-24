@@ -26,8 +26,14 @@ int minRange = 64;
 // 292 = 128 + 64
 int maxRange = 192;
 
-int minSpeed = 450;
-int maxSpeed = 1020;
+// int minSpeed = 450;
+int minSpeed = 160;
+int minSpeedDeltaLeft = 0;
+int minSpeedDeltaRight = 0;
+// int maxSpeed = 1020;
+int maxSpeed = 255;
+int maxSpeedDeltaLeft = 0;
+int maxSpeedDeltaRight = 0;
 int noSpeed = 0;
 
 
@@ -38,34 +44,34 @@ void moveControl(int x, int y) {
   {
     digitalWrite(RightMotorDir,HIGH);
     digitalWrite(LeftMotorDir,HIGH);
-    analogWrite(RightMotorSpeed,maxSpeed);
-    analogWrite(LeftMotorSpeed,maxSpeed);
+    analogWrite(RightMotorSpeed,maxSpeed + maxSpeedDeltaRight);
+    analogWrite(LeftMotorSpeed,maxSpeed + maxSpeedDeltaLeft);
     #if defined ROBIGAMI_DEBUG
     Serial.println("Move forward");
     #endif
   }
- 
-  // move forward right
+
+  // move forward and right
   else if(x >= maxRange && y >= maxRange)
   {
     digitalWrite(RightMotorDir,HIGH);
     digitalWrite(LeftMotorDir,HIGH);
-    analogWrite(RightMotorSpeed,minSpeed);
-    analogWrite(LeftMotorSpeed,maxSpeed);
+    analogWrite(RightMotorSpeed,minSpeed + minSpeedDeltaRight);
+    analogWrite(LeftMotorSpeed,maxSpeed + maxSpeedDeltaLeft);
     #if defined ROBIGAMI_DEBUG
-    Serial.println("Move forward right");
+    Serial.println("Move forward and right");
     #endif
   }
 
-  // move forward left
+  // move forward and left
   else if(x <= minRange && y >= maxRange)
   {
     digitalWrite(RightMotorDir,HIGH);
     digitalWrite(LeftMotorDir,HIGH);
-    analogWrite(RightMotorSpeed,maxSpeed);
-    analogWrite(LeftMotorSpeed,minSpeed);
+    analogWrite(RightMotorSpeed,maxSpeed + maxSpeedDeltaRight);
+    analogWrite(LeftMotorSpeed,minSpeed + minSpeedDeltaLeft);
     #if defined ROBIGAMI_DEBUG
-    Serial.println("Move forward left");
+    Serial.println("Move forward and left");
     #endif
   }
 
@@ -84,8 +90,8 @@ void moveControl(int x, int y) {
   {
     digitalWrite(RightMotorDir,LOW);
     digitalWrite(LeftMotorDir,LOW);
-    analogWrite(RightMotorSpeed,maxSpeed);
-    analogWrite(LeftMotorSpeed,maxSpeed);
+    analogWrite(RightMotorSpeed,maxSpeed + maxSpeedDeltaRight);
+    analogWrite(LeftMotorSpeed,maxSpeed + maxSpeedDeltaLeft);
     #if defined ROBIGAMI_DEBUG
     Serial.println("Move backward");
     #endif
@@ -96,8 +102,8 @@ void moveControl(int x, int y) {
   {
     digitalWrite(RightMotorDir,LOW);
     digitalWrite(LeftMotorDir,LOW);
-    analogWrite(RightMotorSpeed,minSpeed);
-    analogWrite(LeftMotorSpeed,maxSpeed); 
+    analogWrite(RightMotorSpeed,minSpeed + minSpeedDeltaRight);
+    analogWrite(LeftMotorSpeed,maxSpeed + maxSpeedDeltaLeft);
     #if defined ROBIGAMI_DEBUG
     Serial.println("Move back right");
     #endif
@@ -108,8 +114,8 @@ void moveControl(int x, int y) {
   {
     digitalWrite(RightMotorDir,LOW);
     digitalWrite(LeftMotorDir,LOW);
-    analogWrite(RightMotorSpeed,maxSpeed);
-    analogWrite(LeftMotorSpeed,minSpeed);
+    analogWrite(RightMotorSpeed,maxSpeed + maxSpeedDeltaRight);
+    analogWrite(LeftMotorSpeed,minSpeed + minSpeedDeltaLeft);
     #if defined ROBIGAMI_DEBUG
     Serial.println("Move back left");
     #endif
