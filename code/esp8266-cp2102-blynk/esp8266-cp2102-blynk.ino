@@ -1,6 +1,6 @@
 #define BLYNK_PRINT Serial
 
-#define ROBIGAMI_DEBUG 1
+#define ROBIGAMI_CONSOLE_LOG 1
 #define ROBIGAMI_MOVE_BACK_SWAP 1
 #define ROBIGAMI_SMART_CONFIG 1
 
@@ -48,7 +48,7 @@ void moveControl(int x, int y) {
     digitalWrite(LeftMotorDir,HIGH);
     analogWrite(RightMotorSpeed,maxSpeed + maxSpeedDeltaRight);
     analogWrite(LeftMotorSpeed,maxSpeed + maxSpeedDeltaLeft);
-    #if defined ROBIGAMI_DEBUG
+    #if ROBIGAMI_CONSOLE_LOG
     Serial.println("Move forward");
     #endif
   }
@@ -60,7 +60,7 @@ void moveControl(int x, int y) {
     digitalWrite(LeftMotorDir,HIGH);
     analogWrite(RightMotorSpeed,minSpeed + minSpeedDeltaRight);
     analogWrite(LeftMotorSpeed,maxSpeed + maxSpeedDeltaLeft);
-    #if defined ROBIGAMI_DEBUG
+    #if ROBIGAMI_CONSOLE_LOG
     Serial.println("Move forward and right");
     #endif
   }
@@ -72,7 +72,7 @@ void moveControl(int x, int y) {
     digitalWrite(LeftMotorDir,HIGH);
     analogWrite(RightMotorSpeed,maxSpeed + maxSpeedDeltaRight);
     analogWrite(LeftMotorSpeed,minSpeed + minSpeedDeltaLeft);
-    #if defined ROBIGAMI_DEBUG
+    #if ROBIGAMI_CONSOLE_LOG
     Serial.println("Move forward and left");
     #endif
   }
@@ -82,7 +82,7 @@ void moveControl(int x, int y) {
   {
     analogWrite(RightMotorSpeed,noSpeed);
     analogWrite(LeftMotorSpeed,noSpeed);
-    #if defined ROBIGAMI_DEBUG
+    #if ROBIGAMI_CONSOLE_LOG
     Serial.println("Stand by");
     #endif
   }
@@ -94,7 +94,7 @@ void moveControl(int x, int y) {
     digitalWrite(LeftMotorDir,LOW);
     analogWrite(RightMotorSpeed,maxSpeed + maxSpeedDeltaRight);
     analogWrite(LeftMotorSpeed,maxSpeed + maxSpeedDeltaLeft);
-    #if defined ROBIGAMI_DEBUG
+    #if ROBIGAMI_CONSOLE_LOG
     Serial.println("Move backward");
     #endif
   }
@@ -105,7 +105,7 @@ void moveControl(int x, int y) {
     digitalWrite(RightMotorDir,LOW);
     digitalWrite(LeftMotorDir,LOW);
     //
-    #if defined ROBIGAMI_MOVE_BACK_SWAP
+    #if ROBIGAMI_MOVE_BACK_SWAP
     analogWrite(RightMotorSpeed,maxSpeed + maxSpeedDeltaRight);
     analogWrite(LeftMotorSpeed,minSpeed + minSpeedDeltaLeft);
     #else
@@ -113,7 +113,7 @@ void moveControl(int x, int y) {
     analogWrite(LeftMotorSpeed,maxSpeed + maxSpeedDeltaLeft);
     #endif
     //
-    #if defined ROBIGAMI_DEBUG
+    #if ROBIGAMI_CONSOLE_LOG
     Serial.println("Move back right");
     #endif
   }
@@ -124,7 +124,7 @@ void moveControl(int x, int y) {
     digitalWrite(RightMotorDir,LOW);
     digitalWrite(LeftMotorDir,LOW);
     //
-    #if defined ROBIGAMI_MOVE_BACK_SWAP
+    #if ROBIGAMI_MOVE_BACK_SWAP
     analogWrite(RightMotorSpeed,minSpeed + minSpeedDeltaRight);
     analogWrite(LeftMotorSpeed,maxSpeed + maxSpeedDeltaLeft);
     #else
@@ -132,7 +132,7 @@ void moveControl(int x, int y) {
     analogWrite(LeftMotorSpeed,minSpeed + minSpeedDeltaLeft);
     #endif
     //
-    #if defined ROBIGAMI_DEBUG
+    #if ROBIGAMI_CONSOLE_LOG
     Serial.println("Move back left");
     #endif
   }
@@ -154,7 +154,7 @@ void initControl() {
 // This function is called every time the device is connected to the Blynk.Cloud
 BLYNK_CONNECTED()
 {
-  #if defined ROBIGAMI_DEBUG
+  #if ROBIGAMI_CONSOLE_LOG
   Serial.println("Blynk is connected");
   #endif
 }
