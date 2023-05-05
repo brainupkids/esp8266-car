@@ -2,6 +2,7 @@
 
 #define ROBIGAMI_DEBUG 1
 #define ROBIGAMI_MOVE_BACK_SWAP 1
+#define ROBIGAMI_SMART_CONFIG 1
 
 #include "./credentials-blynk.h"
 #include "./credentials-wifi.h"
@@ -24,7 +25,7 @@ int minRange = 64;
 
 // 712 = 512 + 200
 // int maxRange = 712;
-// 292 = 128 + 64
+// 192 = 128 + 64
 int maxRange = 192;
 
 // int minSpeed = 450;
@@ -153,10 +154,9 @@ void initControl() {
 // This function is called every time the device is connected to the Blynk.Cloud
 BLYNK_CONNECTED()
 {
-  // Change Web Link Button message to "Congratulations!"
-  Blynk.setProperty(V3, "offImageUrl", "https://static-image.nyc3.cdn.digitaloceanspaces.com/general/fte/congratulations.png");
-  Blynk.setProperty(V3, "onImageUrl",  "https://static-image.nyc3.cdn.digitaloceanspaces.com/general/fte/congratulations_pressed.png");
-  Blynk.setProperty(V3, "url", "https://docs.blynk.io/en/getting-started/what-do-i-need-to-blynk/how-quickstart-device-was-made");
+  #if defined ROBIGAMI_DEBUG
+  Serial.println("Blynk is connected");
+  #endif
 }
 
 BLYNK_WRITE(V7)
@@ -183,8 +183,44 @@ void setup() {
   // Debug console
   Serial.begin(115200);
 
+  #if ROBIGAMI_SMART_CONFIG
+  int cnt = 0;
+
+  Serial.println("connecting...");
+
+  WiFi.mode(WIFI_STA);
+
+  while(WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+    if(cnt++ >= 10){
+       WiFi.beginSmartConfig();
+       while (1) {
+            delay(1000);
+            if(WiFi.smartConfigDone()) {
+              Serial.println("SmartConfig Success");
+              break;
+            }
+       }
+    }
+  }
+
+  Serial.println("---------");
+
+  WiFi.printDiag(Serial);
+
+  String dyna_ssid = WiFi.SSID();
+  String dyna_password = WiFi.psk();
+
+  Blynk.begin(BLYNK_AUTH_TOKEN, dyna_ssid.c_str(), dyna_password.c_str());
+
+  Serial.println("Server started");
+  Serial.println(WiFi.localIP());
+
+  #else
   // Connect and authenticate to Blynk.cloud
   Blynk.begin(BLYNK_AUTH_TOKEN, wifi_ssid, wifi_password);
+  #endif
 
   //
   initControl();
